@@ -1,10 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Title} from "../shared/Title";
 import styled from "styled-components";
 import { YMaps, Map, Placemark } from "react-yandex-maps";
 import {Phone} from "../shared/svg/Phone";
 import {Address} from "../shared/svg/Address";
 import {Email} from "../shared/svg/Email";
+import {useOnScreen} from "../hooks/useScreen";
+import {PAGES} from "../App";
 
 const Wrapper = styled.div`
     padding: 5.11111vh 3.8888vw 0;
@@ -66,7 +68,7 @@ const AddictiveInfo = styled.p`
         line-height: 21px;
     }
 `
-const Contacts = () => {
+const Contacts = ({setCurrentPage}) => {
 
     const [height, setHeight] = useState('66.666vh');
     const [width, setWidth] = useState('88.888vh');
@@ -90,13 +92,23 @@ const Contacts = () => {
         [56.865446, 35.944065],
     ];
 
-    return <Wrapper>
+    const target = useRef(null);
+    const onScreen = useOnScreen(target);
+    useEffect(()=>{
+        if (onScreen) {
+            setCurrentPage(PAGES.Contacts);
+            console.log(PAGES.Contacts);
+        }
+    }, [onScreen, setCurrentPage]);
+
+
+    return <Wrapper ref={target} id={'contacts'}>
         <Title>Контакты</Title>
         <ContactsWrapper>
             <MapWrapper>
                 <YMaps>
                     <Map defaultState={mapData} width={width} height={height}>
-                        {coordinates.map(coordinate => <Placemark geometry={coordinate} />)}
+                        {coordinates.map(coordinate => <Placemark geometry={coordinate} key={coordinate} />)}
                     </Map>
                 </YMaps>
             </MapWrapper>

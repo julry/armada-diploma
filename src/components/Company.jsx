@@ -1,8 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {Title} from "../shared/Title";
 import {autotrans, buildingLogo, prom} from "../constants/images";
 import Slider from "react-slick";
+import {useOnScreen} from "../hooks/useScreen";
+import {PAGES} from "../App";
 
 const Wrapper = styled.div`
     padding: 5.11111vh 8.8888vw 5vh;
@@ -114,7 +116,7 @@ const Img = styled.img`
     }
 `
 
-const Company = () => {
+const Company = ({setCurrentPage}) => {
     const [settings, setSettings] = useState({
         dots: false,
         infinite: true,
@@ -128,12 +130,21 @@ const Company = () => {
         if (window.innerWidth < 640) {
             setSettings(settings=> ({...settings, slidesToShow: 2.5}))
         }
-    })
+    }, []);
 
-    return <Wrapper>
+    const target = useRef(null);
+    const onScreen = useOnScreen(target);
+    useEffect(()=>{
+        if (onScreen) {
+            setCurrentPage(PAGES.Company);
+            console.log(PAGES.Company);
+        }
+    }, [onScreen, setCurrentPage]);
+
+    return <Wrapper ref={target} id={'company'}>
         <Title> О компании </Title>
         <Description>
-            <Priorities>
+            <Priorities className={'animate__animated animate__fadeInLeft'}>
                 <PrioritiesBg />
                 <PriorityCard>
                     <PriorityText>
@@ -151,7 +162,7 @@ const Company = () => {
                     </PriorityText>
                 </PriorityCard>
             </Priorities>
-            <Text>
+            <Text className={'animate__animated animate__fadeInRight animate__delay-1s'}>
                 {'Начиная с 2015 года “Армада” безукорезненно работает на рынке предоставления охранных услуг в г. Тверь с полученной лицензией  №377 на осуществление частной охранной деятельности.\n\nВысококвалифицированные сотрудники действуют в соотвествии с Федеральным Законом “О частной детективной и охранной деятельности в РФ”.'}
             </Text>
         </Description>

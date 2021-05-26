@@ -1,7 +1,8 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useRef} from "react";
 import styled from 'styled-components';
-import {background, backgroundDesktop, backgroundMobile} from "../constants/images";
-import 'animate.css/animate.css';
+import {background} from "../constants/images";
+import {useOnScreen} from "../hooks/useScreen";
+import {PAGES} from "../App";
 
 const Wrapper = styled.div`
     position: relative;
@@ -105,25 +106,37 @@ const Button = styled.button`
         padding: 11px 0;
     }
 `
-const Intro = () => {
 
-    return <Wrapper>
+const Link = styled.a`
+ text-decoration: none;
+ color: white;
+`
+const Intro = ({setCurrentPage}) => {
+    const target = useRef(null);
+    const onScreen = useOnScreen(target);
+    useEffect(()=>{
+        if (onScreen) {
+            setCurrentPage(PAGES.Main);
+            console.log(PAGES.Main);
+        }
+    }, [onScreen, setCurrentPage]);
+    return <Wrapper ref={target} id={'main'}>
         <Background>
             <Img src={background} alt={''}/>
             {/*<ImgMobile src={backgroundMobile} alt={''}/>*/}
         </Background>
         <Black />
         <InfoWrapper>
-            <Title className={'animate__animated animate__slow animate__fadeInLeft'}>
+            <Title>
                 ОХРАННЫЕ УСЛУГИ
                 РАЗЛИЧНОЙ
                 СЛОЖНОСТИ
             </Title>
-            <Text className={'animate__animated animate__slow animate__delay-1s animate__fadeInLeft'}>
+            <Text>
                 Наши сотрудники знают самые <b>короткие</b> маршруты и <b>особенности</b> вашего объекта
             </Text>
-            <Button className={'animate__animated animate__slow animate__delay-2s animate__fadeInLeft'}>
-                Получить консультацию
+            <Button>
+                <Link href={'#form'}>Получить консультацию </Link>
             </Button>
         </InfoWrapper>
     </Wrapper>

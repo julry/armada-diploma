@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import styled from 'styled-components';
 import {Title} from "../shared/Title";
 import {HouseSecurity} from "../shared/svg/houseSecur";
@@ -7,6 +7,9 @@ import {FireSecurity} from "../shared/svg/FireSecurity";
 import {MobileGroup} from "../shared/svg/MobileGroup";
 import {PhysSecurity} from "../shared/svg/PhysSecurity";
 import {BusinessSecurity} from "../shared/svg/BusinessSecurity";
+import 'animate.css/animate.css';
+import {useOnScreen} from "../hooks/useScreen";
+import {PAGES} from "../App";
 
 
 const Wrapper = styled.div`
@@ -101,13 +104,21 @@ const MoreLink = styled.p`
     }
 `
 
-const Services  = () => {
-    return  <Wrapper>
+const Services  = ({setCurrentPage}) => {
+    const target = useRef(null);
+    const onScreen = useOnScreen(target);
+    useEffect(()=>{
+        if (onScreen) {
+            setCurrentPage(PAGES.Services);
+            console.log(PAGES.Services);
+        }
+    }, [onScreen, setCurrentPage]);
+    return  <Wrapper ref={target} id={'services'}>
             <Title>
                 Наши услуги
             </Title>
             <ServicesWrapper>
-                <ServiceCard>
+                <ServiceCard className={'animate__animated animate__slow animate__zoomIn'}>
                     <HouseSecurity />
                     <Description>
                         <DescriptionTitle>
@@ -117,7 +128,7 @@ const Services  = () => {
                         <MoreLink>Больше..</MoreLink>
                     </Description>
                 </ServiceCard>
-                <ServiceCard>
+                <ServiceCard className={'animate__animated animate__slow animate__zoomIn'}>
                     <Video />
                     <Description>
                         <DescriptionTitle>
@@ -126,7 +137,7 @@ const Services  = () => {
                         <MoreLink>Больше..</MoreLink>
                     </Description>
                 </ServiceCard>
-                <ServiceCard>
+                <ServiceCard className={'animate__animated animate__slow animate__zoomIn animate__delay-1s'}>
                     <FireSecurity />
                     <Description>
                         <DescriptionTitle>
@@ -135,7 +146,7 @@ const Services  = () => {
                         <MoreLink>Больше..</MoreLink>
                     </Description>
                 </ServiceCard>
-                <ServiceCard>
+                <ServiceCard className={'animate__animated animate__slow animate__zoomIn animate__delay-1s'}>
                     <MobileGroup />
                     <Description>
                         <DescriptionTitle>
@@ -144,7 +155,7 @@ const Services  = () => {
                         <MoreLink>Больше..</MoreLink>
                     </Description>
                 </ServiceCard>
-                <ServiceCard>
+                <ServiceCard className={'animate__animated animate__slow animate__zoomIn animate__delay-2s'}>
                     <PhysSecurity />
                     <Description>
                         <DescriptionTitle>
@@ -153,7 +164,7 @@ const Services  = () => {
                         <MoreLink>Больше..</MoreLink>
                     </Description>
                 </ServiceCard>
-                <ServiceCard>
+                <ServiceCard className={'animate__animated animate__slow animate__zoomIn animate__delay-2s'}>
                     <BusinessSecurity />
                     <Description>
                         <DescriptionTitle>

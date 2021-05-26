@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import styled from "styled-components";
 import {logo} from "../constants/images";
 import {Burger} from "../shared/svg/Burger";
+import {PAGES} from "../App";
 
 const Wrapper = styled.div`
   position: fixed;
@@ -32,10 +33,13 @@ const Logo = styled.img`
 const Link = styled.a`
     text-decoration: none;
     cursor: pointer;
-    
+    color: #EEECEC;
     &:hover{
         color: #FE5D26;
     }
+`
+const ActiveLink = styled(Link)`
+        color: #FE5D26;
 `
 const Pages = styled.div`
     display:  none;
@@ -55,16 +59,17 @@ const BurgerStyled = styled(Burger)`
     }
 `
 
-export const Header = () => {
+export const Header = ({currentPage}) => {
     const [isVisible, setIsVisible] = useState(false);
     return <Wrapper>
         <Logo src={logo} alt={''}/>
         {/*<Name>АРМАДА ТВЕРЬ</Name>*/}
         <Pages>
-            <Link>Главная</Link>
-            <Link>Услуги</Link>
-            <Link>О компании</Link>
-            <Link>Контакты</Link>
+            {currentPage===PAGES.Main ? <ActiveLink>Главная</ActiveLink> : <Link href={'#main'}>Главная</Link>}
+            {currentPage===PAGES.Services ? <ActiveLink>Услуги</ActiveLink> : <Link href={'#services'}>Услуги</Link>}
+            {currentPage===PAGES.Company ? <ActiveLink>О компании</ActiveLink> : <Link href={'#company'}>О компании</Link>}
+            {currentPage===PAGES.Contacts ? <ActiveLink>Контакты</ActiveLink> : <Link href={'#contacts'}>Контакты</Link>}
+
         </Pages>
         <BurgerStyled />
         {/*{isVisible&&<ModalMenu />}*/}
