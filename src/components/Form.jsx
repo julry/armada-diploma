@@ -2,11 +2,12 @@ import styled from "styled-components";
 import React, {useState} from "react";
 import {Title} from "../shared/Title";
 import {CheckMark} from "../shared/svg/CheckMark";
+import {ModalSend} from "../shared/ModalSend";
 
 const Wrapper = styled.div`
     background: #01013A;
     min-height: 93vh;
-    
+    position: relative;
     @media screen and (min-width: 640px){
         padding: 5.11111vh 3.8888vw 5.11111vh;
     }
@@ -145,7 +146,8 @@ const Form  = () => {
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [comment, setComment] = useState('');
-    return <Wrapper>
+    const [isModal, setIsModal] = useState(true);
+    return <Wrapper id={'form'}>
         <FormWrapper>
         <FormTitle>Бесплатная консультация</FormTitle>
         <FormFields>
@@ -183,6 +185,7 @@ const Form  = () => {
             </WrapperStyled>
             <Button> Отправить заявку</Button>
         </FormWrapper>
+        {isModal&&<ModalSend />}
     </Wrapper>
 }
 
