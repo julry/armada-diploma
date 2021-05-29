@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import styled from 'styled-components';
 import {Title} from "../shared/Title";
 import {HouseSecurity} from "../shared/svg/houseSecur";
@@ -10,6 +10,7 @@ import {BusinessSecurity} from "../shared/svg/BusinessSecurity";
 import 'animate.css/animate.css';
 import {useOnScreen} from "../hooks/useScreen";
 import {PAGES} from "../App";
+import {ModalInfo} from "../shared/ModalInfo";
 
 
 const Wrapper = styled.div`
@@ -18,7 +19,6 @@ const Wrapper = styled.div`
     @media screen and (min-width: 640px){
         padding: 5.11111vh 3.8888vw 0;
       height: calc(100vh - 87px);
-      overflow: hidden;
     }
 `
 const ServicesWrapper = styled.div`
@@ -36,6 +36,7 @@ const ServicesWrapper = styled.div`
 
 const ServiceCard = styled.div`
   width: 100%;
+  position: relative;
   padding: 2.111vh;
   display: flex;
   background: #FFFFFF;
@@ -104,76 +105,109 @@ const MoreLink = styled.p`
     }
 `
 
-const Services  = ({setCurrentPage}) => {
+const Services  = ({currentPage, setCurrentPage}) => {
+    const [isMoreOpenHouse, setIsMoreOpenHouse] = useState(false);
+    const [isMoreOpenVideo, setIsMoreOpenVideo] = useState(false);
+    const [isMoreOpenFire, setIsMoreOpenFire] = useState(false);
+    const [isMoreOpenMobile, setIsMoreOpenMobile] = useState(false);
+    const [isMoreOpenPhys, setIsMoreOpenPhys] = useState(false);
+    const [isMoreOpenBusiness, setIsMoreOpenBusiness] = useState(false);
     const target = useRef(null);
     const onScreen = useOnScreen(target);
     useEffect(()=>{
         if (onScreen) {
             setCurrentPage(PAGES.Services);
-            console.log(PAGES.Services);
         }
     }, [onScreen, setCurrentPage]);
     return  <Wrapper ref={target} id={'services'}>
             <Title>
                 Наши услуги
             </Title>
+        {(currentPage===PAGES.Services || currentPage === PAGES.Company ) ? <>
             <ServicesWrapper>
-                <ServiceCard className={'animate__animated animate__slow animate__zoomIn'}>
+                <ServiceCard className={currentPage===PAGES.Services ? 'animate__animated animate__slow animate__zoomIn' : ""} style={{zIndex: '6'}}>
                     <HouseSecurity />
                     <Description>
                         <DescriptionTitle>
                             Охрана частной
                             собственности
                         </DescriptionTitle>
-                        <MoreLink>Больше..</MoreLink>
+                        <MoreLink onClick={()=>setIsMoreOpenHouse(true)}>Больше..</MoreLink>
+                        {isMoreOpenHouse&&<ModalInfo
+                            text={'Все больше и больше людей предпочитают заботиться о собственной безопасности, безопасности своих объектов недвижимости во избежание проблемных ситуаций, связанных с мошенническими системами, вторжением в личное пространство посторонних людей.'}
+                            onClose={setIsMoreOpenHouse}
+                        />}
                     </Description>
                 </ServiceCard>
-                <ServiceCard className={'animate__animated animate__slow animate__zoomIn'}>
+                <ServiceCard style={{zIndex: '5'}} className={currentPage===PAGES.Services ? 'animate__animated animate__slow animate__zoomIn' : ''}>
                     <Video />
                     <Description>
                         <DescriptionTitle>
                             Монтаж видеонаблюдения
                         </DescriptionTitle>
-                        <MoreLink>Больше..</MoreLink>
+                        <MoreLink onClick={()=>setIsMoreOpenVideo(true)}>Больше..</MoreLink>
+                        {isMoreOpenVideo&&<ModalInfo
+                            text={'Мы используем только современное оборудование проверенных производителей и делаем все возможное, чтобы оптимизировать стоимость услуг. В зависимости от сложности задачи монтаж занимает от нескольких часов до нескольких дней.'}
+                            onClose={setIsMoreOpenVideo}
+                        />}
                     </Description>
                 </ServiceCard>
-                <ServiceCard className={'animate__animated animate__slow animate__zoomIn animate__delay-1s'}>
+                <ServiceCard style={{zIndex: '4'}} className={currentPage===PAGES.Services ?'animate__animated animate__slow animate__zoomIn animate__delay-1s': ''}>
                     <FireSecurity />
                     <Description>
                         <DescriptionTitle>
                             {"Пожарная\nсигнализация"}
                         </DescriptionTitle>
-                        <MoreLink>Больше..</MoreLink>
+                        <MoreLink onClick={()=>setIsMoreOpenFire(true)}>Больше..</MoreLink>
+                        {isMoreOpenFire&&<ModalInfo
+                            text={'Ежегодно тысячи людей погибают из-за отсутствия элементарных средств противопожарной безопасности. Не стоит экономить на своей безопасности!\n' +
+                            'Пожарная сигнализация моментально выявит пожар еще на ранней стадии и немедленно передаст сигнал на пульт.'}
+                            onClose={setIsMoreOpenFire}
+                        />}
                     </Description>
                 </ServiceCard>
-                <ServiceCard className={'animate__animated animate__slow animate__zoomIn animate__delay-1s'}>
+                <ServiceCard style={{zIndex: '3'}} className={currentPage===PAGES.Services ?'animate__animated animate__slow animate__zoomIn animate__delay-1s' : ''}>
                     <MobileGroup />
                     <Description>
                         <DescriptionTitle>
                             Мобильная группа
                         </DescriptionTitle>
-                        <MoreLink>Больше..</MoreLink>
+                        <MoreLink onClick={()=>setIsMoreOpenMobile(true)}>Больше..</MoreLink>
+                        {isMoreOpenMobile&&<ModalInfo
+                            text={"Возникновение нештатных ситуаций на охраняемых объектах, а также во время проведения массовых мероприятий, требует мгновенной реакции на происходящее и принятия решений, способных обеспечить безопасность людей и сохранность материальных ценностей."}
+                            onClose={setIsMoreOpenMobile}
+                        />}
                     </Description>
                 </ServiceCard>
-                <ServiceCard className={'animate__animated animate__slow animate__zoomIn animate__delay-2s'}>
+                <ServiceCard style={{zIndex: '2'}} className={currentPage===PAGES.Services ? 'animate__animated animate__slow animate__zoomIn animate__delay-2s': ''}>
                     <PhysSecurity />
                     <Description>
                         <DescriptionTitle>
                             Физическая охрана
                         </DescriptionTitle>
-                        <MoreLink>Больше..</MoreLink>
+                        <MoreLink onClick={()=>setIsMoreOpenPhys(true)}>Больше..</MoreLink>
+                        {isMoreOpenPhys&&<ModalInfo
+                            text={'Физическая охрана предусматривает непосредственное нахождение сотрудников охранной организации на объекте. Физическая охрана осуществляется строго по инструкции, согласованной с Заказчиком, и контролируется начальником охраны'}
+                            onClose={setIsMoreOpenPhys}
+                        />}
                     </Description>
                 </ServiceCard>
-                <ServiceCard className={'animate__animated animate__slow animate__zoomIn animate__delay-2s'}>
+                <ServiceCard style={{zIndex: '1'}} className={currentPage===PAGES.Services ? 'animate__animated animate__slow animate__zoomIn animate__delay-2s' : ''}>
                     <BusinessSecurity />
                     <Description>
                         <DescriptionTitle>
                             Охрана бизнеса
                         </DescriptionTitle>
-                        <MoreLink>Больше..</MoreLink>
+                        <MoreLink onClick={()=>setIsMoreOpenBusiness(true)}>Больше..</MoreLink>
+                        {isMoreOpenBusiness&&<ModalInfo
+                            text={'Охрана коммерческого объекта — необходимая и важная статья расходов, это ваша гарантия безопасности. Услуги ЧОО "АРМАДА Тверь транспортная безопасность" — это безупречное соотношение цены и качества работы.'}
+                            onClose={setIsMoreOpenBusiness}
+                        />}
                     </Description>
                 </ServiceCard>
             </ServicesWrapper>
+            </>
+            : <div style={{height:'100vh'}} />}
 
     </Wrapper>
 
