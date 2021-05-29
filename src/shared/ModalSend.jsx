@@ -43,9 +43,19 @@ const Text = styled.p`
      text-align: center;
 
 `
-export const ModalSend = () => {
+
+const CloseBtn = styled.p`
+    color: #7E7E7E;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    cursor: pointer;
+`
+export const ModalSend = ({setIsModalOpen}) => {
+
     return <Wrapper>
         <Modal>
+            <CloseBtn onClick={()=>setIsModalOpen(false)}>X</CloseBtn>
             <Title>Ваша заявка обрабатывается!</Title>
             <Text>Ждите звонка</Text>
         </Modal>

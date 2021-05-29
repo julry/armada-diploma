@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import React, {useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Title} from "../shared/Title";
 import {CheckMark} from "../shared/svg/CheckMark";
 import {ModalSend} from "../shared/ModalSend";
@@ -140,29 +140,70 @@ const TextWrapperStyled = styled.div`
   
 `;
 
+const HelperText = styled.p`
+  color: red;
+  font-size: 10px;
+  margin-top: -4vh;
+  margin-bottom: 4vh;
+`
+
 const Form  = () => {
     const [personDataAgree, setPersonDataAgree] = useState(false);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [comment, setComment] = useState('');
-    const [isModal, setIsModal] = useState(true);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const [isEmpty, setIsEmpty] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const phoneReg = /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$/;
+    const sendForm = () => {
+        if (name==='' || phone==='') setIsEmpty(true);
+        else if (!phone.match(phoneReg)) setIsError(true);
+        else setIsModalOpen(true)
+    }
+
     return <Wrapper id={'form'}>
         <FormWrapper>
         <FormTitle>Бесплатная консультация</FormTitle>
         <FormFields>
             <Text>
-                ФИО
+                ФИО <span style={{color:'red'}}>*</span>
             </Text>
-            <Input placeholder={'Иванов Иван Иванович'} value={name} onChange={(e)=> setName(e.target.value)}/>
+            <Input
+                placeholder={'Иванов Иван Иванович'}
+                value={name}
+                style={isEmpty&&name==='' ? {borderColor: 'red'} : {}}
+                onChange={(e)=> {
+                    setIsEmpty(false);
+                    setName(e.target.value)
+                }}
+            />
             <Text>
-                Номер телефона
+                Номер телефона <span style={{color:'red'}}>*</span>
             </Text>
-            <Input type={'phone'} placeholder={'+79000000000'} value={phone} onChange={(e)=> setPhone(e.target.value)}/>
+            <Input
+                type={'phone'}
+                placeholder={'+79000000000'}
+                style={isEmpty&&phone==='' ? {borderColor: 'red'} : {}}
+                value={phone}
+                onChange={(e)=> {
+                    setIsError(false);
+                    setIsEmpty(false);
+                    setPhone(e.target.value)
+                }}
+            />
+            {isError&&<HelperText>Введите корректный номер</HelperText>}
             <Text>
                 Email
             </Text>
-            <Input type={'email'} placeholder={'email@email.com'} value={email} onChange={(e)=> setEmail(e.target.value)}/>
+            <Input
+                type={'email'}
+                placeholder={'email@email.com'}
+                value={email}
+                onChange={(e)=> setEmail(e.target.value)}
+            />
             <Text>
                 Комментарий
             </Text>
@@ -183,9 +224,9 @@ const Form  = () => {
                     </TextWrapperStyled>
                 </LabelStyled>
             </WrapperStyled>
-            <Button> Отправить заявку</Button>
+            <Button onClick={sendForm}> Отправить заявку</Button>
         </FormWrapper>
-        {isModal&&<ModalSend />}
+        {isModalOpen&&<ModalSend setIsModalOpen={setIsModalOpen}/>}
     </Wrapper>
 }
 

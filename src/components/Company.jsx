@@ -116,7 +116,7 @@ const Img = styled.img`
     }
 `
 
-const Company = ({setCurrentPage}) => {
+const Company = ({currentPage, setCurrentPage}) => {
     const [settings, setSettings] = useState({
         dots: false,
         infinite: true,
@@ -137,15 +137,15 @@ const Company = ({setCurrentPage}) => {
     useEffect(()=>{
         if (onScreen) {
             setCurrentPage(PAGES.Company);
-            console.log(PAGES.Company);
         }
     }, [onScreen, setCurrentPage]);
 
     return <Wrapper ref={target} id={'company'}>
         <Title> О компании </Title>
         <Description>
-            <Priorities className={'animate__animated animate__fadeInLeft'}>
-                <PrioritiesBg />
+            {currentPage===PAGES.Company || currentPage === PAGES.Contacts ?<>
+                <Priorities className={'animate__animated animate__fadeInLeft'}>
+                <PrioritiesBg/>
                 <PriorityCard>
                     <PriorityText>
                         <HighlightText> 6 </HighlightText> ЛЕТ НА РЫНКЕ
@@ -162,9 +162,11 @@ const Company = ({setCurrentPage}) => {
                     </PriorityText>
                 </PriorityCard>
             </Priorities>
-            <Text className={'animate__animated animate__fadeInRight animate__delay-1s'}>
+            <Text className={currentPage===PAGES.Company ? 'animate__animated animate__fadeInRight animate__delay-1s' : ''}>
                 {'Начиная с 2015 года “Армада” безукорезненно работает на рынке предоставления охранных услуг в г. Тверь с полученной лицензией  №377 на осуществление частной охранной деятельности.\n\nВысококвалифицированные сотрудники действуют в соотвествии с Федеральным Законом “О частной детективной и охранной деятельности в РФ”.'}
             </Text>
+            </>
+            : <div style={{height: '320px'}} />}
         </Description>
         <PartnersTitle>
             Партнеры

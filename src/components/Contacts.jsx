@@ -97,7 +97,6 @@ const Contacts = ({setCurrentPage}) => {
     useEffect(()=>{
         if (onScreen) {
             setCurrentPage(PAGES.Contacts);
-            console.log(PAGES.Contacts);
         }
     }, [onScreen, setCurrentPage]);
 

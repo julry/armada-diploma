@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Intro from "./components/Intro";
 import {Header} from "./components/Header";
 import Services from "./components/Sevices";
@@ -15,14 +15,33 @@ export const PAGES = {
 }
 function App() {
     const [currentPage, setCurrentPage] = useState(PAGES.Main);
-  return (<>
-        <Header currentPage={currentPage} />
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    function useOutside(ref) {
+        useEffect(() => {
+            function handleClickOutside(event) {
+                if (ref.current && !ref.current.contains(event.target)) {
+                    setIsModalOpen(false);
+                }
+            }
+            // Bind the event listener
+            document.addEventListener("mousedown", handleClickOutside);
+            return () => {
+                // Unbind the event listener on clean up
+                document.removeEventListener("mousedown", handleClickOutside);
+            };
+        }, [ref]);
+    }
+
+
+  return (<div>
+        <Header currentPage={currentPage} useOutside={useOutside} isMenuOpen={isModalOpen} setIsMenuOpen={setIsModalOpen}/>
         <Intro setCurrentPage={setCurrentPage}/>
-        <Services setCurrentPage={setCurrentPage}/>
-        <Company setCurrentPage={setCurrentPage}/>
+        <Services currentPage={currentPage} setCurrentPage={setCurrentPage} useOutside={useOutside} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+        <Company currentPage={currentPage} setCurrentPage={setCurrentPage}/>
         <Contacts setCurrentPage={setCurrentPage}/>
         <Form/>
-      </>
+      </div>
   );
 }
 
